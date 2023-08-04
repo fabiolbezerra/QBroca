@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+        template="/template.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        QBroca - Produtos
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formListaProdutos">
+            <div class="ui-g">
+                <div class="ui-g-8">
+                    <p:messages showDetail="true" closable="true"/>
+
+                    <h2>Lista de Produtos</h2>
+
+                    <p:dataTable
+                            value="#{produtoBean.produtos}"
+                            var="produto"
+                            emptyMessage="Nenhum produto"
+                            selectionMode="single"
+                            selection="#{produtoBean.produtoSelecionado}"
+                            rowKey="#{produto.id}">
+                        <f:facet name="header">
+                            <p:commandButton value="Novo"
+                                             title="Novo produto"
+                                             action="#{produtoBean.novoProduto()}"
+                                             ajax="false"/>
+                        </f:facet>
+
+                        <p:ajax event="rowSelect" listener="#{produtoBean.onRowSelect}" update="@parent:panelProduto"/>
+
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{produto.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Descrição">
+                            <h:outputText value="#{produto.descricao} "/>
+                        </p:column>
+
+                        <p:column headerText="Preço">
+                            <h:outputText value="#{produto.preco}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Categoria">
+                            <h:outputText value="#{produto.categoria.nome}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+
+                <div class="ui-g-4">
+                    <h2>Cadastro de Produto</h2>
+
+                    <p:outputPanel id="panelProduto">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Nome"/>
+                            <p:inputText value="#{produtoBean.produto.nome}"/>
+
+                            <p:outputLabel value="Descrição"/>
+                            <p:inputTextarea value="#{produtoBean.produto.descricao}" maxlength="150"/>
+
+                            <p:outputLabel value="Preço"/>
+                            <p:inputNumber value="#{produtoBean.produto.preco}" symbol="R$ "/>
+
+                            <p:outputLabel value="Categoria"/>
+                            <p:selectOneMenu value="#{produtoBean.produto.categoria}" converter="categoriaConverter">
+                                <f:selectItem noSelectionOption="true" itemLabel="Selecione a categoria"/>
+                                <f:selectItems value="#{produtoBean.categorias}" var="categoria"
+                                               itemValue="#{categoria}" itemLabel="#{categoria.nome}"/>
+                            </p:selectOneMenu>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Salvar"
+                                                 title="Salvar produto"
+                                                 action="#{produtoBean.salvarProduto()}"
+                                                 update="@form"/>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

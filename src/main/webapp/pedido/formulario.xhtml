@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+        template="/template.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        QBroca - Novo Pedido
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formNovoPedido">
+            <div class="ui-g">
+                <div class="ui-g-6">
+                    <h2>Contato do cliente</h2>
+
+                    <p:outputPanel id="panelCliente">
+                        <h:panelGrid columns="2">
+                            <p:inputMask id="phone" value="#{novoPedidoBean.telefone}" mask="(99) 99999-999?9"
+                                         placeholder="Telefone"/>
+                            <p:commandButton
+                                    value="Buscar"
+                                    title="Pesquisar cliente pelo telefone"
+                                    action="#{novoPedidoBean.pesquisarCliente()}"
+                                    update="@form"/>
+
+                            <p:inputText value="#{novoPedidoBean.cliente.nome}" placeholder="Nome"/>
+                            <p:inputText value="#{novoPedidoBean.cliente.sobrenome}" placeholder="Sobrenome"/>
+
+                            <f:facet name="footer">
+                                <p:commandButton
+                                        value="Salvar"
+                                        title="Salvar o cliente"
+                                        action="#{novoPedidoBean.salvarCliente()}"
+                                        update="@form"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:outputPanel>
+
+                    <h2>Endereços do cliente</h2>
+                    <p:outputPanel id="panelEnderecos">
+                        <p:messages showDetail="true" closable="true"/>
+                        <p:inputMask mask="99.999-999" placeholder="CEP" value="#{novoPedidoBean.cep}"/>
+                        <p:commandButton
+                                value="Buscar"
+                                title="Buscar endeço pelo CEP"
+                                action="#{novoPedidoBean.pesquisarEnderecoPorCEP()}"
+                                update="panelEnderecos"/>
+                        <br/>
+                        <h:panelGrid columns="3">
+                            <p:outputLabel value="Logradouro"/>
+                            <p:outputLabel value="Número"/>
+                            <p:outputLabel value="Complemento"/>
+
+                            <p:inputText value="#{novoPedidoBean.endereco.logradouro}" placeholder="Logradouro"/>
+                            <p:inputText value="#{novoPedidoBean.endereco.numero}" placeholder="Número"/>
+                            <p:inputText value="#{novoPedidoBean.endereco.complemento}" placeholder="Complemento"/>
+
+                            <p:outputLabel value="Bairro"/>
+                            <p:outputLabel value="Cidade"/>
+                            <p:outputLabel value="Estado"/>
+
+                            <p:inputText value="#{novoPedidoBean.endereco.bairro}" placeholder="Bairro"/>
+                            <p:inputText value="#{novoPedidoBean.endereco.cidade}" placeholder="Cidade"/>
+                            <p:selectOneMenu value="#{novoPedidoBean.endereco.estado}" placeholder="Estado">
+                                <f:selectItems value="#{qBrocaEnumBean.estadosDaFederacao}"
+                                               var="estado"
+                                               itemValue="#{estado.sigla}"
+                                               itemLabel="#{estado.nome}"/>
+                            </p:selectOneMenu>
+
+                            <f:facet name="footer">
+                                <p:commandButton
+                                        value="Salvar"
+                                        title="Salvar novo endereço do cliente"
+                                        action="#{novoPedidoBean.salvarEnderecoDoCliente()}"
+                                        update="panelEnderecos"/>
+                            </f:facet>
+                        </h:panelGrid>
+
+                        <br/>
+                        <p:dataTable
+                                value="#{novoPedidoBean.enderecos}"
+                                var="e"
+                                selectionMode="single"
+                                selection="#{novoPedidoBean.enderecoSelecionado}"
+                                rowKey="#{e.id}"
+                                emptyMessage="Nenhum endereço">
+                            <p:ajax event="rowSelect"
+                                    listener="#{novoPedidoBean.onRowSelect}"
+                                    update="@parent:panelPedido"/>
+
+                            <p:column headerText="Logradouro" width="60%">
+                                <h:outputText value="#{e.logradouro}"/>
+                            </p:column>
+
+                            <p:column headerText="Logradouro" width="20%">
+                                <h:outputText value="#{e.numero}"/>
+                            </p:column>
+
+                            <p:column headerText="Complemento" width="20%">
+                                <h:outputText value="#{e.complemento}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+                </div>
+                <div class="ui-g-6">
+                    <h2>Novo pedido</h2>
+                    <p:outputPanel id="panelPedido">
+                        <div class="ui-g">
+                            <div class="ui-g-6">
+                                <h3>Cliente</h3>
+
+                                <h:outputText value="#{novoPedidoBean.pedido.cliente.nome}"/>
+                                <h:outputText value="#{novoPedidoBean.pedido.cliente.sobrenome}"/>
+                                <br/>
+                                <h:outputText value="#{novoPedidoBean.pedido.cliente.telefone}">
+                                    <f:converter converterId="telefoneConverter"/>
+                                </h:outputText>
+                            </div>
+                            <div class="ui-g-6">
+                                <h3>Endereço selecionado</h3>
+
+                                <h:outputText value="Nenhum endereço selecionado"
+                                              rendered="#{empty novoPedidoBean.enderecoSelecionado}"/>
+                                <p:outputPanel id="panelEnderecoSelecionado"
+                                               rendered="#{not empty novoPedidoBean.enderecoSelecionado}">
+                                    <h:outputText value="#{novoPedidoBean.pedido.endereco.logradouro}, "/>
+                                    <h:outputText value="#{novoPedidoBean.pedido.endereco.numero}"/>
+                                    <br/>
+                                    <h:outputText value="#{novoPedidoBean.pedido.endereco.complemento}"/>
+                                    <br/>
+                                    <h:outputText value="#{novoPedidoBean.pedido.endereco.bairro}"/>
+                                </p:outputPanel>
+                            </div>
+                        </div>
+                        <p:messages showDetail="true" closable="true"/>
+                        <p:panelGrid columns="3">
+                            <p:outputLabel value="Produto"/>
+                            <p:outputLabel value="Quantidade"/>
+                            <p:outputLabel value="Observação"/>
+
+                            <p:autoComplete
+                                    value="#{novoPedidoBean.produto}"
+                                    completeMethod="#{novoPedidoBean.autocompleteProduto}"
+                                    var="p"
+                                    itemLabel="#{p.nome}"
+                                    itemValue="#{p}"
+                                    converter="produtoConverter"
+                                    forceSelection="true"
+                                    placeholder="Produto">
+                                <p:column>
+                                    <h:outputText value="#{p.nome}"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{p.descricao}"/>
+                                </p:column>
+                            </p:autoComplete>
+                            <p:spinner minValue="0.0"
+                                       value="#{novoPedidoBean.quantidade}"
+                                       stepFactor="0.5"/>
+                            <p:inputTextarea placeholder="Observação"
+                                             value="#{novoPedidoBean.observacao}"
+                                             maxlength="50"/>
+
+                            <f:facet name="footer">
+                                <p:commandButton
+                                        value="Adicionar"
+                                        title="Adicionar produto selecionado ao pedido"
+                                        action="#{novoPedidoBean.adicionarProdutoAoPedido()}"
+                                        update="panelPedido"/>
+                            </f:facet>
+                        </p:panelGrid>
+                        <br/>
+                        <br/>
+                        <p:dataTable
+                                id="dtItensDoPedido"
+                                value="#{novoPedidoBean.itensDoPedido}"
+                                var="item"
+                                emptyMessage="Nenhum item no pedido">
+                            <f:facet name="header">
+                                Itens do Pedido
+                            </f:facet>
+
+                            <p:column headerText="Produto">
+                                <h:outputText value="#{item.produto.nome}"/>
+                            </p:column>
+
+                            <p:column headerText="Quantidade">
+                                <h:outputText value="#{item.quantidade}"/>
+                            </p:column>
+
+                            <p:column headerText="Observação">
+                                <h:outputText value="#{item.observacao}"/>
+                            </p:column>
+
+                            <p:column headerText="Subtotal">
+                                <h:outputText value="#{item.total}">
+                                    <f:convertNumber type="currency"/>
+                                </h:outputText>
+                                <h:outputText value=" "/>
+                                <p:commandLink value="Excluir" action="#{novoPedidoBean.excluirItemDoPedido()}"
+                                               update="dtItensDoPedido">
+                                    <f:setPropertyActionListener value="#{item}"
+                                                                 target="#{novoPedidoBean.itemSelecionado}"/>
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                        <br/>
+                        <h3>
+                            <h:outputText value="Total: "/>
+                            <h:outputText value="#{novoPedidoBean.pedido.total}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </h3>
+
+                        <p:commandButton
+                                value="Criar Pedido"
+                                title="Cria um novo pedido para o cliente, endereço e itens selecionados"
+                                action="#{novoPedidoBean.criarPedido()}"
+                                ajax="false"/>
+                    </p:outputPanel>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

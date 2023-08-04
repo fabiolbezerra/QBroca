@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+        template="/template.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        QBroca - Últimos Pedidos
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formListaPedidos">
+            <p:messages showDetail="true" closable="true" />
+
+            <h2>Últimos Pedidos (24h)</h2>
+
+            <p:dataTable value="#{pedidoBean.ultimosPedidos}" var="pedido" emptyMessage="Nenhum pedido">
+                <p:column headerText="Código" width="10%">
+                    <h:outputText value="#{pedido.id}" />
+                </p:column>
+
+                <p:column headerText="Data/Hora">
+                    <h:outputText value="#{pedido.dataHora}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH'h'mm'min'" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Cliente">
+                    <h:outputText value="#{pedido.cliente.nome} " />
+                    <h:outputText value="#{pedido.cliente.sobrenome}" />
+                </p:column>
+
+                <p:column headerText="Telefone">
+                    <h:outputText value="#{pedido.cliente.telefone}" >
+                        <f:converter converterId="telefoneConverter" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Endereço" width="25%">
+                    <h:outputText value="#{pedido.endereco.logradouro}, " />
+                    <h:outputText value="#{pedido.endereco.numero}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
