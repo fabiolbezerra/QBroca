@@ -13,7 +13,41 @@
     </ui:define>
 
     <ui:define name="content">
+        <h3>Estatísticas de Clientes</h3>
+        <p:panelGrid columns="3">
+            <h:outputText value="Novos clientes (24h) "/>
+            <h:outputText value="Novos clientes (Mês) "/>
+            <h:outputText value="Clientes "/>
 
+            <h:outputText value="#{dashboardBean.numeroDeClientes24h}"/>
+            <h:outputText value="#{dashboardBean.numeroDeClientesNoMes}"/>
+            <h:outputText value="#{dashboardBean.numeroDeClientes}"/>
+        </p:panelGrid>
+
+        <h3>Estatísticas de Pedidos</h3>
+        <p:panelGrid columns="3">
+            <h:outputText value="Novos pedidos (24h) "/>
+            <h:outputText value="Novos pedidos (Mês) "/>
+            <h:outputText value="Pedidos "/>
+
+            <h:outputText value="#{dashboardBean.numeroDePedidos24h}"/>
+            <h:outputText value="#{dashboardBean.numeroDePedidosNoMes}"/>
+            <h:outputText value="#{dashboardBean.numeroDePedidos}"/>
+
+            <h:outputText value="Ticket médio (24h) "/>
+            <h:outputText value="Ticket médio (Mês) "/>
+            <h:outputText value="Ticket médio "/>
+
+            <h:outputText value="#{dashboardBean.mediaDosPedidos24h}">
+                <f:convertNumber type="currency"/>
+            </h:outputText>
+            <h:outputText value="#{dashboardBean.mediaDosPedidosNoMes}">
+                <f:convertNumber type="currency"/>
+            </h:outputText>
+            <h:outputText value="#{dashboardBean.mediaDosPedidos}">
+                <f:convertNumber type="currency"/>
+            </h:outputText>
+        </p:panelGrid>
     </ui:define>
 
 </ui:composition>
