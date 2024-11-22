@@ -2,18 +2,18 @@
 insert into restaurante (id, nome) values (1, 'Minha Broca');
 
 -- clientes
-insert into cliente (id, nome, sobrenome, telefone, restaurante, data_hora) values (1, 'Fábio', 'Bezerra', '91981222689', 1, now());
-insert into cliente (id, nome, sobrenome, telefone, restaurante, data_hora) values (2, 'Erika', 'Bezerra', '91981467319', 1, now());
+insert into cliente (id, nome, sobrenome, telefone, restaurante, data_hora) values (1, 'Fulano', 'de Tal', '91980222680', 1, now());
+insert into cliente (id, nome, sobrenome, telefone, restaurante, data_hora) values (2, 'Beltrana', 'de Tal', '91980467310', 1, now());
 
 -- endereços
 insert into endereco (id, logradouro, numero, complemento, cep, bairro, cidade, estado, cliente)
-values (1, 'Travessa Três de Maio', '1787', 'Ap 1901', '66.063-388', 'São Brás', 'Belém', 'PA', 1);
+values (1, 'Travessa 20 de Abril', '1787', 'Ap 901', '66.000-000', 'São Brás', 'Belém', 'PA', 1);
 insert into endereco (id, logradouro, numero, complemento, cep, bairro, cidade, estado, cliente)
-values (2, 'Avenida Alcindo Cacela', '995', 'Ap 205', '66.060-000', 'Umarizal', 'Belém', 'PA', 1);
+values (2, 'Avenida da Rocha', '995', 'Ap 500', '66.000-000', 'Umarizal', 'Belém', 'PA', 1);
 insert into endereco (id, logradouro, numero, complemento, cep, bairro, cidade, estado, cliente)
-values (3, 'Travessa Três de Maio', '1787', 'Ap 1901', '66.063-388', 'São Brás', 'Belém', 'PA', 2);
+values (3, 'Travessa 20 de Abril', '1787', 'Ap 901', '66.000-000', 'São Brás', 'Belém', 'PA', 2);
 insert into endereco (id, logradouro, numero, complemento, cep, bairro, cidade, estado, cliente)
-values (4, 'Rua Boaventura da Silva', '1578', 'Ap 1900', '66.060-060', 'Umarizal', 'Belém', 'PA', 2);
+values (4, 'Rua do Silva', '1500', 'Ap 19', '66.000-000', 'Coqueiro', 'Belém', 'PA', 2);
 
 -- categorias
 insert into categoria (id, nome, restaurante) values (1, 'Hambúrguer', 1);
